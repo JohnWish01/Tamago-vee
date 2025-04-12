@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tamago-vee</title>
+  </head>
+  <body>
+    <h1>Tamago-vee</h1>
+
+    <div id="nameInputSection">
+      <p>Comment veux-tu appeler ton Tamago-vee ?</p>
+      <input type="text" id="nameInput" placeholder="Entre un nom..." />
+      <button onclick="setName()">Valider</button>
+    </div>
+
+    <div id="gameSection" style="display: none">
+      <div class="status">
+        <p>Nom : <span id="name">Tama</span></p>
+        <p>Énergie : <span id="energy">100</span></p>
+        <div class="energy-bar">
+          <div class="energy-fill" id="energyFill"></div>
+        </div>
+        <p>Humeur : <span id="mood">Heureux</span></p>
+      </div>
+      <button onclick="feed()">Nourrir</button>
+      <button onclick="play()">Jouer</button>
+      <button onclick="rest()">Repos</button>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

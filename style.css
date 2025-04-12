@@ -1,0 +1,85 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background-color: #ffd000;
+}
+
+h1 {
+  color: #333;
+  margin-top: 20px;
+}
+
+.status {
+  margin: 20px 0;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  display: inline-block;
+  width: 300px;
+}
+
+.status p {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #059250;
+}
+
+button:active {
+  background-color: #036ad1;
+}
+
+body.jour {
+  background-color: #ffbb006e; /* ciel clair */
+  color: #000;
+}
+
+body.nuit {
+  background-color: #46466e; /* nuit sombre */
+  color: #fff;
+}
+
+.nuit .status {
+  background-color: #2c2c3d;
+  border-color: #555;
+}
+
+.nuit button {
+  background-color: #555;
+}
+
+.nuit button:hover {
+  background-color: #333;
+}
+.energy-bar {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.energy-fill {
+  height: 100%;
+  background-color: #28a745;
+  width: 100%; /* sera mis à jour dynamiquement */
+  transition: width 0.3s ease;
+}
