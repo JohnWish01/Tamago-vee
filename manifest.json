@@ -1,0 +1,20 @@
+{
+  "name": "Tamago-vee",
+  "short_name": "Tamago-vee",
+  "description": "Ton petit compagnon virtuel à nourrir, amuser et faire grandir.",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffe8a3",
+  "theme_color": "#ffb703",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

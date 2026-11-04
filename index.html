@@ -2,33 +2,95 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffb703" />
+    <meta name="description" content="Tamago-vee : ton petit compagnon virtuel à nourrir, amuser et faire grandir." />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
     <link rel="stylesheet" href="style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tamago-vee</title>
   </head>
-  <body>
-    <h1>Tamago-vee</h1>
+  <body class="jour">
+    <main class="console">
+      <h1 class="titre">Tamago-vee</h1>
 
-    <div id="nameInputSection">
-      <p>Comment veux-tu appeler ton Tamago-vee ?</p>
-      <input type="text" id="nameInput" placeholder="Entre un nom..." />
-      <button onclick="setName()">Valider</button>
-    </div>
-
-    <div id="gameSection" style="display: none">
-      <div class="status">
-        <p>Nom : <span id="name">Tama</span></p>
-        <p>Énergie : <span id="energy">100</span></p>
-        <div class="energy-bar">
-          <div class="energy-fill" id="energyFill"></div>
+      <!-- Écran 1 : choix du nom -->
+      <section id="ecranNom" class="ecran">
+        <div class="creature-zone">
+          <div id="oeufAccueil" class="creature"></div>
         </div>
-        <p>Humeur : <span id="mood">Heureux</span></p>
-      </div>
-      <button onclick="feed()">Nourrir</button>
-      <button onclick="play()">Jouer</button>
-      <button onclick="rest()">Repos</button>
-    </div>
+        <p class="indice">Chaque œuf cache une créature différente…</p>
+        <button type="button" id="btnAutreOeuf" class="btn btn-secondaire">🔄 Choisir un autre œuf</button>
+        <form id="formNom" class="form-nom">
+          <label for="nameInput">Comment veux-tu appeler ton Tamago-vee ?</label>
+          <input type="text" id="nameInput" maxlength="16" placeholder="Entre un nom..." autocomplete="off" />
+          <button type="submit" class="btn btn-principal">Adopter</button>
+        </form>
+      </section>
 
+      <!-- Écran 2 : le jeu -->
+      <section id="ecranJeu" class="ecran" hidden>
+        <header class="entete">
+          <span id="nom" class="nom"></span>
+          <span id="infoAge" class="age"></span>
+        </header>
+        <p id="espece" class="espece"></p>
+
+        <div class="creature-zone" id="creatureZone">
+          <div class="decor" aria-hidden="true">
+            <span class="soleil"></span>
+            <span class="lune"></span>
+            <span class="nuage nuage-1"></span>
+            <span class="nuage nuage-2"></span>
+            <span class="etoile" style="top: 14%; left: 12%"></span>
+            <span class="etoile" style="top: 30%; left: 30%; animation-delay: 0.7s"></span>
+            <span class="etoile" style="top: 10%; left: 52%; animation-delay: 1.3s"></span>
+            <span class="etoile" style="top: 36%; left: 68%; animation-delay: 0.4s"></span>
+            <span class="etoile" style="top: 22%; left: 88%; animation-delay: 1.8s"></span>
+          </div>
+          <div id="bulle" class="bulle" hidden></div>
+          <div id="creature" class="creature">
+            <div id="creatureSvg" class="creature-svg"></div>
+          </div>
+        </div>
+
+        <p class="humeur">Humeur : <strong id="humeur"></strong></p>
+
+        <div class="jauges">
+          <div class="jauge">
+            <span class="jauge-label">🍙 Faim</span>
+            <div class="jauge-barre"><div class="jauge-fill" id="jaugeFaim"></div></div>
+          </div>
+          <div class="jauge">
+            <span class="jauge-label">💛 Bonheur</span>
+            <div class="jauge-barre"><div class="jauge-fill" id="jaugeBonheur"></div></div>
+          </div>
+          <div class="jauge">
+            <span class="jauge-label">⚡ Énergie</span>
+            <div class="jauge-barre"><div class="jauge-fill" id="jaugeEnergie"></div></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="btnNourrir">🍙<span>Nourrir</span></button>
+          <button class="btn" id="btnJouer">🎾<span>Jouer</span></button>
+          <button class="btn" id="btnDormir">🌙<span>Dormir</span></button>
+          <button class="btn btn-soin" id="btnSoigner" hidden>💊<span>Soigner</span></button>
+        </div>
+      </section>
+
+      <!-- Écran 3 : départ -->
+      <section id="ecranFin" class="ecran" hidden>
+        <div class="creature-zone">
+          <div id="creatureFin" class="creature"></div>
+        </div>
+        <p id="messageFin" class="message-fin"></p>
+        <button id="btnRecommencer" class="btn btn-principal">Adopter un nouvel œuf</button>
+      </section>
+    </main>
+
+    <script src="creature.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

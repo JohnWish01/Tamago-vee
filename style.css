@@ -1,85 +1,782 @@
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  background-color: #ffd000;
-}
-
-h1 {
-  color: #333;
-  margin-top: 20px;
-}
-
-.status {
-  margin: 20px 0;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  background-color: #fff;
-  display: inline-block;
-  width: 300px;
-}
-
-.status p {
-  margin: 10px 0;
-  font-size: 18px;
-}
-
-button {
-  margin: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #059250;
-}
-
-button:active {
-  background-color: #036ad1;
-}
-
-body.jour {
-  background-color: #ffbb006e; /* ciel clair */
-  color: #000;
+:root {
+  --fond: #ffe8a3;
+  --fond-2: #ffd166;
+  --carte: #ffffff;
+  --texte: #2b2d42;
+  --texte-doux: #6c6f85;
+  --bord: #f1d58a;
+  --btn: #ff8fab;
+  --btn-hover: #ff6f91;
+  --btn-texte: #ffffff;
+  --principal: #3a86ff;
+  --jauge-fond: #efe7d3;
+  --ok: #2ec27e;
+  --moyen: #f6c343;
+  --bas: #e5484d;
+  --ciel-haut: #bfe6ff;
+  --ciel-bas: #e8f6ff;
+  --sol: #c8e6a0;
 }
 
 body.nuit {
-  background-color: #46466e; /* nuit sombre */
-  color: #fff;
+  --fond: #2b2d50;
+  --fond-2: #1b1c33;
+  --carte: #34365c;
+  --texte: #f1f1f8;
+  --texte-doux: #b6b8d6;
+  --bord: #4a4c7a;
+  --btn: #6c63ff;
+  --btn-hover: #574fe0;
+  --jauge-fond: #25263f;
+  --ciel-haut: #14163a;
+  --ciel-bas: #2e3170;
+  --sol: #3b4a3a;
 }
 
-.nuit .status {
-  background-color: #2c2c3d;
-  border-color: #555;
+* {
+  box-sizing: border-box;
 }
 
-.nuit button {
-  background-color: #555;
+html,
+body {
+  margin: 0;
+  min-height: 100%;
 }
 
-.nuit button:hover {
-  background-color: #333;
+body {
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  color: var(--texte);
+  background: radial-gradient(circle at 50% 0%, var(--fond), var(--fond-2));
+  background-attachment: fixed;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  transition: background 0.6s ease, color 0.6s ease;
+  -webkit-tap-highlight-color: transparent;
 }
-.energy-bar {
+
+.console {
   width: 100%;
-  background-color: #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-  height: 20px;
-  margin-top: 5px;
+  max-width: 420px;
+  background: var(--carte);
+  border: 3px solid var(--bord);
+  border-radius: 32px;
+  padding: 20px 18px 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  align-self: flex-start;
+  transition: background 0.6s ease, border-color 0.6s ease;
 }
 
-.energy-fill {
+.titre {
+  margin: 0 0 12px;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+.ecran[hidden] {
+  display: none;
+}
+
+/* ---------- Créature ---------- */
+.creature-zone {
+  position: relative;
+  height: 200px;
+  margin: 8px 0 4px;
+  border-radius: 24px;
+  background: linear-gradient(to bottom, var(--ciel-haut), var(--ciel-bas) 74%, var(--sol) 74%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  transition: background-color 0.6s ease;
+}
+
+.creature-zone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 40, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.8s ease;
+}
+
+.creature-zone.dodo::after {
+  opacity: 1;
+}
+
+.creature {
+  width: 170px;
+  height: 170px;
+  margin-bottom: 10px;
+}
+
+.creature svg {
+  width: 100%;
   height: 100%;
-  background-color: #28a745;
-  width: 100%; /* sera mis à jour dynamiquement */
-  transition: width 0.3s ease;
+  overflow: visible;
+}
+
+.anim-rebond {
+  animation: rebond 1.6s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.anim-dodo {
+  animation: respire 3s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.anim-triste {
+  animation: tremble 2.5s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.anim-oeuf {
+  animation: oscille 2s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+.anim-saut {
+  animation: saut 0.6s ease-out 2;
+  transform-origin: 50% 100%;
+}
+
+@keyframes rebond {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  45% { transform: translateY(-10px) scale(0.98, 1.03); }
+  55% { transform: translateY(-10px) scale(0.98, 1.03); }
+  90% { transform: translateY(0) scale(1.04, 0.96); }
+}
+
+@keyframes respire {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.03, 0.97); }
+}
+
+@keyframes tremble {
+  0%, 90%, 100% { transform: translateX(0); }
+  92% { transform: translateX(-3px); }
+  94% { transform: translateX(3px); }
+  96% { transform: translateX(-3px); }
+}
+
+@keyframes oscille {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  70% { transform: rotate(-6deg); }
+  80% { transform: rotate(6deg); }
+  90% { transform: rotate(-3deg); }
+}
+
+@keyframes saut {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-28px); }
+}
+
+.zzz {
+  font-size: 20px;
+  font-weight: bold;
+  fill: #ffffff;
+  animation: zzz 2.4s ease-in-out infinite;
+}
+
+@keyframes zzz {
+  0% { opacity: 0; transform: translate(0, 0); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate(14px, -26px); }
+}
+
+/* ---------- Bulle ---------- */
+.bulle {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #2b2d42;
+  border-radius: 16px;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+  z-index: 2;
+  animation: apparait 0.25s ease-out;
+}
+
+.bulle[hidden] {
+  display: none;
+}
+
+@keyframes apparait {
+  from { opacity: 0; transform: translate(-50%, 6px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ---------- En-tête & humeur ---------- */
+.entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.nom {
+  font-size: 1.3rem;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.age {
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+  white-space: nowrap;
+}
+
+.humeur {
+  margin: 8px 0 14px;
+  font-size: 1.05rem;
+}
+
+/* ---------- Jauges ---------- */
+.jauges {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.jauge {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.jauge-label {
+  font-size: 0.95rem;
+}
+
+.jauge-barre {
+  height: 16px;
+  background: var(--jauge-fond);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.jauge-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--ok);
+  border-radius: 999px;
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+/* ---------- Boutons ---------- */
+.actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.btn {
+  font: inherit;
+  border: none;
+  border-radius: 18px;
+  background: var(--btn);
+  color: var(--btn-texte);
+  padding: 12px 6px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 64px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+  touch-action: manipulation;
+}
+
+.btn span {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.btn:hover {
+  background: var(--btn-hover);
+}
+
+.btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--principal);
+  outline-offset: 2px;
+}
+
+.btn[hidden] {
+  display: none;
+}
+
+.btn-soin {
+  grid-column: 1 / -1;
+  background: var(--ok);
+}
+
+.btn-soin:hover {
+  background: #26a66b;
+}
+
+.btn-principal {
+  background: var(--principal);
+  font-size: 1.05rem;
+  min-height: 52px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-principal:hover {
+  background: #2f6fd6;
+}
+
+/* ---------- Formulaire nom ---------- */
+.form-nom {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.form-nom label {
+  font-size: 1.05rem;
+}
+
+.form-nom input {
+  font: inherit;
+  font-size: 1.1rem;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 2px solid var(--bord);
+  background: var(--carte);
+  color: var(--texte);
+  text-align: center;
+}
+
+/* ---------- Fin ---------- */
+.message-fin {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin: 12px 0 18px;
+}
+
+/* =========================================================
+   Animations : personnage, effets, décor
+   ========================================================= */
+
+/* Le personnage se déplace dans sa zone (piloté image par image par creature.js) */
+.creature {
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  will-change: transform;
+}
+
+.creature-svg.flash {
+  filter: brightness(2.6) saturate(0);
+  transition: filter 0.25s ease;
+}
+
+.creature-svg.silhouette {
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 22px rgba(255, 230, 120, 0.8));
+}
+
+.creature-svg.malade {
+  filter: saturate(0.55) brightness(0.97);
+}
+
+/* ---------- Espèce, bouton autre œuf ---------- */
+.espece {
+  margin: 2px 0 0;
+  padding: 0 4px;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+}
+
+.indice {
+  margin: 10px 0 8px;
+  color: var(--texte-doux);
+  font-size: 0.95rem;
+}
+
+.btn-secondaire {
+  background: transparent;
+  color: var(--texte);
+  border: 2px dashed var(--bord);
+  box-shadow: none;
+  font-size: 0.95rem;
+  min-height: 44px;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-secondaire:hover {
+  background: var(--jauge-fond);
+}
+
+/* ---------- Balle et Zzz ---------- */
+.balle {
+  position: absolute;
+  font-size: 30px;
+  line-height: 1;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.effet-z {
+  top: 8%;
+  left: 62%;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(80, 90, 200, 0.8);
+  animation: zflotte 2.6s ease-out forwards;
+}
+
+@keyframes zflotte {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(var(--dx), -60px) scale(1.3) rotate(15deg); opacity: 0; }
+}
+
+.creature-svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.35s ease;
+}
+
+.creature-svg.gauche {
+  transform: scaleX(-1);
+}
+
+.creature-svg.apparition {
+  animation: pop 0.7s cubic-bezier(0.3, 1.6, 0.5, 1);
+  transform-origin: 50% 100%;
+}
+
+.creature.brille {
+  animation: brille 1.4s ease-out;
+}
+
+@keyframes pop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@keyframes brille {
+  0% { filter: drop-shadow(0 0 0 rgba(255, 215, 0, 0)); }
+  40% { filter: drop-shadow(0 0 22px rgba(255, 215, 0, 1)) brightness(1.25); }
+  100% { filter: drop-shadow(0 0 0 rgba(255, 215, 0, 0)); }
+}
+
+/* Clignement des yeux */
+.yeux {
+  animation: cligne 4.2s infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes cligne {
+  0%, 93%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.1); }
+}
+
+/* Mastication */
+.mache {
+  animation: mache 0.22s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes mache {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0.25); }
+}
+
+/* L'œuf tremble fort juste avant d'éclore */
+.anim-oeuf-fort {
+  animation: oscille-fort 0.5s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+@keyframes oscille-fort {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(7deg); }
+}
+
+/* ---------- Effets ponctuels ---------- */
+.effet {
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+  z-index: 3;
+  line-height: 1;
+  user-select: none;
+}
+
+.effet-nourriture {
+  font-size: 30px;
+  top: calc(var(--bouche) - 18px);
+  animation: tombe 0.9s ease-in forwards;
+}
+
+@keyframes tombe {
+  0% { transform: translate(-50%, -150px) rotate(-25deg); opacity: 0; }
+  15% { opacity: 1; }
+  75% { transform: translate(-50%, 0) rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, 0) scale(0.2); opacity: 0; }
+}
+
+.effet-coeur {
+  font-size: 22px;
+  top: 25%;
+  animation: monte 1.4s ease-out forwards;
+}
+
+@keyframes monte {
+  0% { transform: translate(-50%, 0) scale(0.4); opacity: 0; }
+  20% { transform: translate(-50%, -10px) scale(1); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), -100px) scale(0.8); opacity: 0; }
+}
+
+.effet-goutte {
+  font-size: 18px;
+  top: 30%;
+  animation: goutte 1.2s ease-in forwards;
+}
+
+@keyframes goutte {
+  0% { transform: translate(calc(-50% + var(--dx)), 0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), 40px); opacity: 0; }
+}
+
+.effet-etincelle {
+  font-size: 20px;
+  top: 50%;
+  animation: etincelle 1s ease-out forwards;
+}
+
+@keyframes etincelle {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  50% { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.2) rotate(90deg); opacity: 0; }
+}
+
+.effet-coquille {
+  width: 22px;
+  height: 22px;
+  top: 55%;
+  background: #fff6e0;
+  border: 2px solid #e8d3a2;
+  clip-path: polygon(0 0, 100% 30%, 40% 100%);
+  animation: eclat 0.9s cubic-bezier(0.2, 0.7, 0.4, 1) forwards;
+}
+
+@keyframes eclat {
+  0% { transform: translate(-50%, -50%) rotate(0); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--r)); opacity: 0; }
+}
+
+.effet-balle {
+  font-size: 28px;
+  left: auto;
+  animation: balle 1.5s ease-in-out forwards;
+}
+
+@keyframes balle {
+  0% { left: 105%; bottom: 120px; transform: rotate(0); }
+  22% { left: 78%; bottom: 22px; }
+  42% { left: 58%; bottom: 100px; }
+  62% { left: 40%; bottom: 22px; }
+  80% { left: 22%; bottom: 62px; }
+  100% { left: -15%; bottom: 22px; transform: rotate(-540deg); }
+}
+
+/* ---------- Décor ---------- */
+.decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.soleil,
+.lune {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+.soleil {
+  background: #ffd23f;
+  box-shadow: 0 0 0 7px rgba(255, 210, 63, 0.28), 0 0 0 14px rgba(255, 210, 63, 0.12);
+  animation: rayonne 3s ease-in-out infinite;
+}
+
+@keyframes rayonne {
+  0%, 100% { box-shadow: 0 0 0 7px rgba(255, 210, 63, 0.28), 0 0 0 14px rgba(255, 210, 63, 0.12); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 210, 63, 0.22), 0 0 0 20px rgba(255, 210, 63, 0.08); }
+}
+
+.lune {
+  box-shadow: 9px 5px 0 0 #f4f1de;
+  top: 10px;
+  right: 30px;
+  animation: flotte 5s ease-in-out infinite;
+}
+
+@keyframes flotte {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.nuage {
+  position: absolute;
+  width: 58px;
+  height: 18px;
+  background: #ffffff;
+  border-radius: 20px;
+  opacity: 0.9;
+  animation: derive linear infinite;
+}
+
+.nuage::before,
+.nuage::after {
+  content: "";
+  position: absolute;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+.nuage::before {
+  width: 26px;
+  height: 26px;
+  top: -13px;
+  left: 9px;
+}
+
+.nuage::after {
+  width: 20px;
+  height: 20px;
+  top: -9px;
+  left: 28px;
+}
+
+.nuage-1 {
+  top: 34px;
+  animation-duration: 38s;
+  animation-delay: -12s;
+}
+
+.nuage-2 {
+  top: 70px;
+  transform: scale(0.75);
+  opacity: 0.75;
+  animation-duration: 55s;
+  animation-delay: -40s;
+}
+
+@keyframes derive {
+  from { left: -80px; }
+  to { left: 110%; }
+}
+
+.etoile {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fffbe6;
+  box-shadow: 0 0 6px #fffbe6;
+  animation: scintille 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes scintille {
+  from { opacity: 0.2; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1.2); }
+}
+
+body.jour .lune,
+body.jour .etoile,
+body.nuit .soleil,
+body.nuit .nuage {
+  display: none;
+}
+
+/* Quand il dort en journée : on tire les rideaux, les étoiles apparaissent */
+body.jour .creature-zone.dodo .etoile {
+  display: block;
+}
+
+body.jour .creature-zone.dodo .soleil,
+body.jour .creature-zone.dodo .nuage {
+  opacity: 0;
+}
+
+/* les étoiles restent visibles par-dessus le voile du dodo */
+.creature-zone.dodo .decor {
+  z-index: 1;
+}
+
+/* ---------- Jauges qui clignotent quand c'est urgent ---------- */
+.jauge-fill.urgent {
+  animation: urgence 0.9s ease-in-out infinite;
+}
+
+@keyframes urgence {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* ---------- Transitions d'écran ---------- */
+.ecran:not([hidden]) {
+  animation: entree 0.45s ease-out;
+}
+
+@keyframes entree {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.bulle {
+  animation: apparait 0.35s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
